@@ -1,0 +1,32 @@
+# Configurar el contenedor base
+#########################################
+## simple nginx y php con curl y vim xD
+#########################################
+FROM nginx:latest
+
+# Instalar PHP y extensiones requeridas
+RUN apt-get update && apt-get install -y \
+    php \
+    php-fpm \
+    php-mysql \
+    php-gd \
+    php-xml \
+    php-mbstring \
+    vim \
+    curl
+# Instalar Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+RUN apt-get install -y nodejs
+# Copiar la configuración de Nginx
+
+# Configurar el directorio de trabajo
+WORKDIR /var/www/html
+
+# Copiar los archivos PHP de tu aplicación al contenedor
+COPY index.php /var/www/html
+
+# Exponer el puerto 80 para Nginx
+EXPOSE 80
+
+# Iniciar los servicios de Nginx y PHP-FPM
+CMD service php-fpm start && nginx -g "daemon off;"
